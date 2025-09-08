@@ -1,485 +1,715 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aviator Cheat Dashboard</title>
-    <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#000000">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black">
-    <meta name="apple-mobile-web-app-title" content="Aviator Cheat">
-    <link rel="apple-touch-icon" href="icon-192x192.png">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Arial, sans-serif;
-        }
-        
-        body {
-            background: #000;
-            color: white;
-            min-height: 100vh;
-            padding: 20px;
-        }
-        
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-        }
-        
-        header {
-            text-align: center;
-            padding: 20px 0;
-            border-bottom: 1px solid #333;
-            margin-bottom: 30px;
-        }
-        
-        .logo {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 15px;
-            margin-bottom: 10px;
-        }
-        
-        .logo-icon {
-            width: 40px;
-            height: 40px;
-            background-color: transparent;
-            border-radius: 50%;
-        }
-        
-        .brand-name {
-            font-size: 24px;
-            font-weight: bold;
-            color: #e74c3c;
-        }
-        
-        h1 {
-            font-size: 22px;
-            color: #666;
-            margin-top: 10px;
-        }
-        
-        .controls {
-            background: #111;
-            padding: 25px;
-            border-radius: 12px;
-            margin-bottom: 30px;
-            border: 1px solid #333;
-        }
-        
-        .form-group {
-            margin-bottom: 20px;
-        }
-        
-        label {
-            display: block;
-            margin-bottom: 8px;
-            color: #ccc;
-            font-size: 14px;
-        }
-        
-        select, input {
-            width: 100%;
-            padding: 12px;
-            background: #222;
-            border: 1px solid #444;
-            border-radius: 6px;
-            color: white;
-            font-size: 15px;
-        }
-        
-        select:focus, input:focus {
-            outline: none;
-            border-color: #e74c3c;
-        }
-        
-        button.primary {
-            width: 100%;
-            padding: 14px;
-            background: #e74c3c;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            font-size: 16px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: background 0.3s ease;
-        }
-        
-        button.primary:hover {
-            background: #c0392b;
-        }
-        
-        button.primary:active {
-            transform: translateY(1px);
-        }
-        
-        .results {
-            background: #111;
-            border-radius: 12px;
-            border: 1px solid #333;
-            overflow: hidden;
-        }
-        
-        .results-header {
-            padding: 15px 20px;
-            background: #222;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .results-header h3 {
-            color: #e74c3c;
-            font-size: 16px;
-        }
-        
-        .results-body {
-            max-height: 400px;
-            overflow-y: auto;
-        }
-        
-        .result-item {
-            padding: 15px 20px;
-            border-bottom: 1px solid #333;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .result-item:last-child {
-            border-bottom: none;
-        }
-        
-        .result-info {
-            flex: 1;
-        }
-        
-        .result-company {
-            font-weight: 500;
-            color: #e74c3c;
-        }
-        
-        .result-time {
-            font-size: 12px;
-            color: #666;
-            margin-top: 4px;
-        }
-        
-        .result-odd {
-            font-size: 20px;
-            font-weight: bold;
-            color: #2ecc71;
-        }
-        
-        /* Empty state */
-        .empty-state {
-            text-align: center;
-            padding: 40px 20px;
-            color: #666;
-            font-size: 14px;
-        }
-        
-        /* Modal Popup */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.9);
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-            animation: fadeIn 0.3s ease-out;
-        }
-        
-        .modal-content {
-            background: #111;
-            padding: 30px;
-            border-radius: 12px;
-            width: 320px;
-            text-align: center;
-            border: 1px solid #333;
-            box-shadow: 0 0 30px rgba(231, 76, 60, 0.4);
-            animation: scaleIn 0.3s ease-out;
-        }
-        
-        .modal h3 {
-            color: #e74c3c;
-            margin-top: 0;
-            font-size: 18px;
-            margin-bottom: 15px;
-        }
-        
-        .modal p {
-            color: #ccc;
-            font-size: 14px;
-            margin-bottom: 20px;
-        }
-        
-        .predicted-odd {
-            font-size: 28px;
-            font-weight: bold;
-            color: #2ecc71;
-            margin: 15px 0;
-            padding: 15px;
-            background: #222;
-            border-radius: 8px;
-            border: 1px solid #444;
-        }
-        
-        .modal-btn {
-            padding: 10px 20px;
-            background: #e74c3c;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 15px;
-        }
-        
-        .modal-btn:hover {
-            background: #c0392b;
-        }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-        
-        @keyframes scaleIn {
-            from { transform: scale(0.8); opacity: 0; }
-            to { transform: scale(1); opacity: 1; }
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="theme-color" content="#e74c3c" />
+  <title>Aviator Predictor</title>
+
+  <!-- PWA Meta -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-title" content="Aviator Predictor">
+  <link rel="apple-touch-icon" href="https://i.imgur.com/7KZoQJl.png">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    body {
+      background: #ffffff;
+      color: #333;
+      height: 100vh;
+      overflow: hidden;
+      touch-action: manipulation;
+      user-select: none;
+    }
+
+    /* Header - Red Curved Background */
+    .header {
+      width: 100%;
+      height: 160px;
+      background: linear-gradient(135deg, #e74c3c, #c0392b);
+      border-bottom-right-radius: 100% 100%;
+      position: relative;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+
+    .header h1 {
+      color: white;
+      font-size: 26px;
+      font-weight: bold;
+      text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+    }
+
+    /* Powered by SportyBet Badge */
+    .powered-by {
+      position: absolute;
+      top: 5px;
+      right: 1px;
+      background: darkred;
+      border-radius: 8px;
+      padding: 4px 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      z-index: 10;
+    }
+
+    .powered-by-logo {
+      width: 30px;
+      height: 30px;
+      background-image: url('https://i.imgur.com/8YqB0Zf.png');
+      background-size: contain;
+      background-repeat: no-repeat;
+    }
+
+    .powered-by-text {
+      font-size: 10px;
+      color: white;
+      font-weight: bold;
+    }
+
+    /* Policy Button (Top Left) */
+    .policy-btn {
+      position: absolute;
+      top: 15px;
+      left: 15px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      border: 1px solid rgba(255, 255, 255, 0.4);
+      border-radius: 8px;
+      padding: 6px 12px;
+      font-size: 12px;
+      cursor: pointer;
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      transition: all 0.3s ease;
+      z-index: 10;
+    }
+
+    /* Time Selector */
+    .time-box {
+      position: absolute;
+      top: 130px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 150px;
+      z-index: 5;
+      background: white;
+      border-radius: 16px;
+      padding: 12px 16px;
+      box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+
+    .time-label {
+      font-size: 12px;
+      color: #e74c3c;
+      font-weight: bold;
+      margin-bottom: 4px;
+    }
+
+    .time-input {
+      width: 100%;
+      padding: 8px;
+      border: 2px solid #e74c3c;
+      border-radius: 10px;
+      font-size: 14px;
+      background: white;
+      color: red;
+      appearance: none;
+      cursor: pointer;
+      background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="%23e74c3c" viewBox="0 0 16 16"><path d="M8 1a7 7 0 1 0 0 14A7 7 0 0 0 8 1zm0 13a6 6 0 1 1 0-12 6 6 0 0 1 0 12z"/><path d="M8 3.5a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-.5.5H5a.5.5 0 0 1 0-1h2.5V4a.5.5 0 0 1 .5-.5z"/></svg>');
+      background-repeat: no-repeat;
+      background-position: right 8px center;
+      background-size: 14px;
+    }
+
+    /* Main Content */
+    .main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      margin-top: -30px;
+      position: relative;
+    }
+
+    /* Static Red Rocket Background */
+    .rocket-background {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: url('https://img.icons8.com/fluency/96/airplane.png');
+      background-size: 40%;
+      background-position: center;
+      background-repeat: no-repeat;
+      opacity: 0.1;
+      filter: hue-rotate(180deg) brightness(120%);
+      z-index: -1;
+    }
+
+    /* Rocket Icon (Foreground) */
+    .rocket-container {
+      width: 160px;
+      height: 100px;
+      margin-bottom: 40px;
+      position: relative;
+    }
+
+    .rocket {
+      width: 100%;
+      height: 100%;
+      background-image: url('https://img.icons8.com/fluency/96/airplane.png');
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
+      filter: invert(28%) sepia(92%) saturate(292%) hue-rotate(355deg) brightness(90%);
+      opacity: 0.8;
+    }
+
+    /* Odd Generator - Semi-Circles */
+    .odd-container {
+      width: 200px;
+      height: 200px;
+      position: relative;
+      margin-bottom: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .ring {
+      position: absolute;
+      border: 2px solid #e74c3c;
+      border-radius: 50%;
+      border-top-color: transparent;
+      border-right-color: transparent;
+      border-bottom-color: transparent;
+      animation: spin linear infinite;
+      opacity: 0.8;
+    }
+
+    .ring1 {
+      width: 100%;
+      height: 100%;
+      animation-duration: 5s;
+      animation-direction: normal;
+    }
+
+    .ring2 {
+      width: 70%;
+      height: 70%;
+      animation-duration: 4s;
+      animation-direction: reverse;
+    }
+
+    .ring3 {
+      width: 50%;
+      height: 50%;
+      animation-duration: 6s;
+      animation-direction: normal;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .odd-value {
+      font-size: 36px;
+      font-weight: bold;
+      color: #e74c3c;
+      z-index: 2;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+    }
+
+    /* Company Selector */
+    .company-section {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 15px;
+      margin-bottom: 25px;
+      background: white;
+      padding: 18px;
+      border-radius: 16px;
+      box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+      width: 90%;
+      max-width: 320px;
+    }
+
+    .company-label {
+      font-size: 14px;
+      color: #e74c3c;
+      font-weight: bold;
+    }
+
+    .company-list {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .company-btn {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      border: 2px solid #ddd;
+      background: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .company-btn.selected {
+      border-color: #e74c3c;
+      transform: scale(1.15);
+      box-shadow: 0 0 10px rgba(231, 76, 60, 0.3);
+    }
+
+    .company-logo {
+      width: 44px;
+      height: 44px;
+      object-fit: contain;
+    }
+
+    /* Start Button */
+    .start-btn {
+      padding: 16px 55px;
+      background: #e74c3c;
+      color: white;
+      border: none;
+      border-radius: 35px;
+      font-size: 19px;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+      animation: pulse 1.5s infinite;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.08); }
+      100% { transform: scale(1); }
+    }
+
+    /* Footer */
+    .footer {
+      padding: 12px;
+      background: #f8f8f8;
+      border-top: 1px solid #eee;
+      text-align: center;
+      font-size: 13px;
+      color: #666;
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+    }
+
+    .footer button {
+      background: none;
+      border: none;
+      color: #e74c3c;
+      font-size: 13px;
+      cursor: pointer;
+      text-decoration: underline;
+    }
+
+    /* ==================== ENHANCED MODAL ==================== */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, #e74c3c, #c0392b);
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+
+    .modal-content {
+      background: white;
+      padding: 32px 28px;
+      border-radius: 20px;
+      width: 90%;
+      max-width: 400px;
+      text-align: center;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+      position: relative;
+      overflow: hidden;
+      animation: modalSlideIn 0.4s ease-out;
+    }
+
+    /* Flying Jet Background */
+    .modal-jet-bg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: 
+        radial-gradient(circle at 20% 50%, rgba(255,255,255,0.1) 0%, transparent 50%),
+        radial-gradient(circle at 80% 30%, rgba(255,255,255,0.08) 0%, transparent 40%);
+      overflow: hidden;
+      z-index: 0;
+    }
+
+    .flying-jet {
+      position: absolute;
+      top: 50%;
+      left: -80px;
+      width: 60px;
+      height: 40px;
+      background-image: url('https://img.icons8.com/fluency/96/airplane.png');
+      background-size: contain;
+      background-repeat: no-repeat;
+      transform: translateY(-50%) rotate(-10deg);
+      animation: flyRight 3s infinite;
+    }
+
+    .speed-line {
+      position: absolute;
+      height: 2px;
+      background: rgba(255,255,255,0.6);
+      transform: rotate(15deg);
+      opacity: 0;
+      animation: speedLine 1.5s infinite;
+    }
+
+    .speed-line:nth-child(1) { top: 20%; left: 10%; width: 40px; animation-delay: 0s; }
+    .speed-line:nth-child(2) { top: 35%; left: 15%; width: 50px; animation-delay: 0.2s; }
+    .speed-line:nth-child(3) { top: 50%; left: 20%; width: 60px; animation-delay: 0.4s; }
+    .speed-line:nth-child(4) { top: 65%; left: 25%; width: 55px; animation-delay: 0.6s; }
+    .speed-line:nth-child(5) { top: 80%; left: 30%; width: 45px; animation-delay: 0.8s; }
+
+    @keyframes flyRight {
+      0% { left: -80px; opacity: 0; }
+      20% { opacity: 1; }
+      80% { opacity: 1; }
+      100% { left: 100%; opacity: 0; }
+    }
+
+    @keyframes speedLine {
+      0% { transform: translateX(0) rotate(15deg); opacity: 0; }
+      50% { opacity: 0.7; }
+      100% { transform: translateX(80px) rotate(15deg); opacity: 0; }
+    }
+
+    @keyframes modalSlideIn {
+      from { opacity: 0; transform: translateY(30px) scale(0.9); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    .modal h3 {
+      color: #e74c3c;
+      margin-bottom: 12px;
+      font-size: 19px;
+      font-weight: bold;
+      position: relative;
+      z-index: 2;
+    }
+
+    .modal p {
+      color: #555;
+      line-height: 1.6;
+      margin-bottom: 20px;
+      font-size: 14px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .modal-btn {
+      padding: 12px 26px;
+      background: #e74c3c;
+      color: white;
+      border: none;
+      border-radius: 24px;
+      cursor: pointer;
+      font-size: 15px;
+      font-weight: bold;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      transition: all 0.3s ease;
+      position: relative;
+      z-index: 2;
+    }
+
+    .modal-btn:hover {
+      background: #c0392b;
+      transform: translateY(-2px);
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <div class="logo">
-                <div class="logo-icon"></div>
-                <div class="brand-name">SPRIBE</div>
-            </div>
-            <h1>Aviator Cheat Dashboard</h1>
-        </header>
-        
-        <div class="controls">
-            <div class="form-group">
-                <label for="company">Select Company</label>
-                <select id="company">
-                    <option value="sporty">Sporty Bet</option>
-                    <option value="betking">BetKing</option>
-                    <option value="bet9ja">Bet9ja</option>
-                    <option value="nairabet">Naira Bet</option>
-                    <option value="betway">Betway</option>
-                </select>
-            </div>
-            
-            <div class="form-group">
-                <label for="time">Game Time (HH:MM)</label>
-                <input type="time" id="time" value="12:00">
-            </div>
-            
-            <button id="generateBtn" class="primary">🎯 START GENERATE FAKE ODD</button>
-        </div>
-        
-        <div class="results">
-            <div class="results-header">
-                <h3>Generated Odds History</h3>
-            </div>
-            <div class="results-body" id="resultsList">
-                <div class="empty-state">
-                    No odds generated yet. Select a company and time, then click "START GENERATE FAKE ODD".
-                </div>
-            </div>
-        </div>
+
+  <!-- Header -->
+  <div class="header">
+    <button class="policy-btn" onclick="window.location.href='privacy.html';">Policy</button>
+    <h1>Aviator Predictor</h1>
+    <div class="powered-by">
+      <div class="powered-by-logo"></div>
+      <div class="powered-by-text">Powered by<br>SportyBet</div>
     </div>
-    
-    <!-- Prediction Modal -->
-    <div class="modal" id="predictionModal">
-        <div class="modal-content">
-            <h3>🎯 PREDICTION READY</h3>
-            <p>The system has analyzed patterns and generated the predicted odd:</p>
-            <div class="predicted-odd" id="predictedOdd">2.45x</div>
-            <p>This odd will be generated at your selected time.</p>
-            <button class="modal-btn" onclick="closeModal()">Got it</button>
-        </div>
+  </div>
+
+  <!-- Time Selector -->
+  <div class="time-box">
+    <div class="time-label">GAME TIME</div>
+    <input type="time" class="time-input" id="gameTime" value="">
+  </div>
+
+  <!-- Main -->
+  <div class="main">
+    <!-- Static Red Rocket Background -->
+    <div class="rocket-background"></div>
+
+    <!-- Rocket Icon (Foreground) -->
+    <div class="rocket-container">
+      <div class="rocket"></div>
     </div>
 
-    <script>
-        // Store generated results
-        let results = [];
-        
-        // Get elements
-        const companySelect = document.getElementById('company');
-        const timeInput = document.getElementById('time');
-        const generateBtn = document.getElementById('generateBtn');
-        const resultsList = document.getElementById('resultsList');
-        const predictionModal = document.getElementById('predictionModal');
-        const predictedOdd = document.getElementById('predictedOdd');
-        
-        // Load results from localStorage
-        function loadResults() {
-            const saved = localStorage.getItem('aviatorResults');
-            if (saved) {
-                results = JSON.parse(saved);
-                renderResults();
-            }
-        }
-        
-        // Save results to localStorage
-        function saveResults() {
-            localStorage.setItem('aviatorResults', JSON.stringify(results));
-        }
-        
-        // Render results list
-        function renderResults() {
-            if (results.length === 0) {
-                resultsList.innerHTML = `
-                    <div class="empty-state">
-                        No odds generated yet. Select a company and time, then click "START GENERATE FAKE ODD".
-                    </div>
-                `;
-                return;
-            }
-            
-            resultsList.innerHTML = '';
-            // Show latest 10 results
-            const recentResults = results.slice(-10).reverse();
-            
-            recentResults.forEach(result => {
-                const item = document.createElement('div');
-                item.className = 'result-item';
-                item.innerHTML = `
-                    <div class="result-info">
-                        <div class="result-company">${result.companyName}</div>
-                        <div class="result-time">${result.time} · ${result.date}</div>
-                    </div>
-                    <div class="result-odd">${result.odd}x</div>
-                `;
-                resultsList.appendChild(item);
-            });
-        }
-        
-        // Generate random odd with some logic
-        function generateOdd() {
-            // Base odd between 1.2 and 10.0
-            let base = 1.2 + Math.random() * 8.8;
-            
-            // Add some "pattern" to make it seem intelligent
-            const time = new Date();
-            const hour = time.getHours();
-            
-            // Slight variation based on hour (makes it seem like there's a pattern)
-            if (hour >= 6 && hour <= 10) {
-                base *= 1.2; // Higher odds in morning
-            } else if (hour >= 18 && hour <= 22) {
-                base *= 0.8; // Lower odds in evening
-            }
-            
-            // Round to 2 decimal places
-            return Math.max(1.2, Math.min(10.0, parseFloat(base.toFixed(2))));
-        }
-        
-        // Format date
-        function formatDate(date) {
-            return date.toLocaleDateString('en-US', {
-                year: 'numeric',
-                month: 'short',
-                day: 'numeric'
-            });
-        }
-        
-        // Format time
-        function formatTime(timeStr) {
-            return timeStr.replace(':', ':');
-        }
-        
-        // Show prediction modal
-        function showPrediction(odd, company, time) {
-            const companyNames = {
-                'sporty': 'Sporty Bet',
-                'betking': 'BetKing',
-                'bet9ja': 'Bet9ja',
-                'nairabet': 'Naira Bet',
-                'betway': 'Betway'
-            };
-            
-            predictedOdd.textContent = `${odd}x`;
-            predictionModal.style.display = 'flex';
-        }
-        
-        // Close modal
-        function closeModal() {
-            predictionModal.style.display = 'none';
-        }
-        
-        // Allow closing modal by clicking outside
-        window.onclick = function(event) {
-            if (event.target === predictionModal) {
-                closeModal();
-            }
-        }
-        
-        // Generate button click
-        generateBtn.addEventListener('click', function() {
-            const company = companySelect.value;
-            const time = timeInput.value;
-            const odd = generateOdd();
-            
-            const companyNames = {
-                'sporty': 'Sporty Bet',
-                'betking': 'BetKing',
-                'bet9ja': 'Bet9ja',
-                'nairabet': 'Naira Bet',
-                'betway': 'Betway'
-            };
-            
-            // Add to results
-            results.unshift({
-                company: company,
-                companyName: companyNames[company],
-                time: formatTime(time),
-                odd: odd,
-                date: formatDate(new Date())
-            });
-            
-            // Keep only last 50 results
-            if (results.length > 50) {
-                results = results.slice(0, 50);
-            }
-            
-            // Save and render
-            saveResults();
-            renderResults();
-            
-            // Show prediction modal
-            showPrediction(odd, company, time);
-        });
-        
-        // Initialize
-        loadResults();
-        renderResults();
+    <!-- Odd with Semi-Circles -->
+    <div class="odd-container">
+      <div class="ring ring1"></div>
+      <div class="ring ring2"></div>
+      <div class="ring ring3"></div>
+      <div class="odd-value">0.00x</div>
+    </div>
 
-        // Register service worker
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('service-worker.js')
-                    .then(registration => {
-                        console.log('ServiceWorker registered:', registration);
-                    })
-                    .catch(error => {
-                        console.log('ServiceWorker registration failed:', error);
-                    });
-            });
+    <!-- Company -->
+    <div class="company-section">
+      <div class="company-label">SELECT COMPANY</div>
+      <div class="company-list" id="companyList">
+        <div class="company-btn" data-name="Bet9ja">
+          <img src="https://i.imgur.com/HqGvLrO.png" alt="Bet9ja" class="company-logo">
+        </div>
+        <div class="company-btn" data-name="SportyBet">
+          <img src="https://i.imgur.com/8YqB0Zf.png" alt="SportyBet" class="company-logo">
+        </div>
+        <div class="company-btn" data-name="1xBet">
+          <img src="https://i.imgur.com/qRtVd9H.png" alt="1xBet" class="company-logo">
+        </div>
+        <div class="company-btn" data-name="Marathon">
+          <img src="https://i.imgur.com/5pEjPnM.png" alt="Marathon" class="company-logo">
+        </div>
+        <div class="company-btn" data-name="BetKing">
+          <img src="https://i.imgur.com/ZKl6vZr.png" alt="BetKing" class="company-logo">
+        </div>
+        <div class="company-btn" data-name="Nairabet">
+          <img src="https://i.imgur.com/7kAaB5W.png" alt="Nairabet" class="company-logo">
+        </div>
+      </div>
+    </div>
+
+    <!-- Start Button -->
+    <button class="start-btn" id="startBtn">START</button>
+  </div>
+
+  <!-- Footer -->
+  <div class="footer">
+    <button onclick="window.location.href='privacy.html';">Privacy & Policy</button>
+  </div>
+
+  <!-- Modals -->
+  <div class="modal" id="companyAlertModal">
+    <div class="modal-content">
+      <div class="modal-jet-bg">
+        <div class="flying-jet"></div>
+        <div class="speed-line"></div>
+        <div class="speed-line"></div>
+        <div class="speed-line"></div>
+        <div class="speed-line"></div>
+        <div class="speed-line"></div>
+      </div>
+      <h3>✈️ Aviator Predictor Says</h3>
+      <p>Please select a company first before starting the prediction.</p>
+      <button class="modal-btn" onclick="closeModal('companyAlertModal')">Got It</button>
+    </div>
+  </div>
+
+  <div class="modal" id="timeAlertModal">
+    <div class="modal-content">
+      <div class="modal-jet-bg">
+        <div class="flying-jet"></div>
+        <div class="speed-line"></div>
+        <div class="speed-line"></div>
+        <div class="speed-line"></div>
+        <div class="speed-line"></div>
+        <div class="speed-line"></div>
+      </div>
+      <h3>⏰ Aviator Predictor Says</h3>
+      <p>The selected time is invalid. Please choose a time up to 3 minutes ahead.</p>
+      <button class="modal-btn" onclick="closeModal('timeAlertModal')">OK</button>
+    </div>
+  </div>
+
+  <script>
+    function closeModal(id) {
+      document.getElementById(id).style.display = 'none';
+    }
+
+    const startBtn = document.getElementById('startBtn');
+    const oddValue = document.querySelector('.odd-value');
+    const companyButtons = document.querySelectorAll('.company-btn');
+    const gameTimeInput = document.getElementById('gameTime');
+
+    let selectedCompany = null;
+    let isRunning = false;
+
+    // Set current time including seconds
+    const now = new Date();
+    const timeStr = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+    gameTimeInput.value = timeStr;
+
+    // Company Selection
+    companyButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        if (isRunning) return;
+        companyButtons.forEach(b => b.classList.remove('selected'));
+        btn.classList.add('selected');
+        selectedCompany = btn.dataset.name;
+      });
+    });
+
+    // Validate Time: Must be now or up to 3 minutes ahead
+    function validateTime() {
+      const input = gameTimeInput.value;
+      if (!input) return false;
+
+      const [setH, setM] = input.split(':').map(Number);
+      const setTime = new Date();
+      setTime.setHours(setH, setM, 0, 0); // Reset seconds and ms
+
+      const now = new Date();
+      const threeMinutesAhead = new Date(now.getTime() + 3 * 60000);
+
+      // Add 10 seconds tolerance for sync
+      if (setTime < now - 10000) {
+        document.getElementById('timeAlertModal').style.display = 'flex';
+        return false;
+      }
+
+      if (setTime > threeMinutesAhead) {
+        document.getElementById('timeAlertModal').style.display = 'flex';
+        return false;
+      }
+
+      return setTime;
+    }
+
+    // Generate unique odd based on time (to the second), company, and salt
+    function generateOddForTimeAndCompany(company, time) {
+      // Include seconds for high variation
+      const year = time.getFullYear();
+      const month = time.getMonth();
+      const day = time.getDate();
+      const hours = time.getHours();
+      const minutes = time.getMinutes();
+      const seconds = time.getSeconds();
+
+      // Unique seed per second + company
+      const seed = `${year}${month}${day}${hours}${minutes}${seconds}${company}`;
+      
+      // Simple but effective non-linear hash
+      let hash = 0;
+      for (let i = 0; i < seed.length; i++) {
+        const char = seed.charCodeAt(i);
+        hash = ((hash << 5) - hash) + char;
+        hash = hash & hash; // Convert to 32-bit integer
+      }
+
+      // Normalize to [0, 1)
+      const rand = (hash < 0 ? -hash : hash) / 0x7FFFFFFF;
+
+      // Map to 0.01–10.00 with realistic distribution
+      let odd;
+      if (rand < 0.75) {
+        // 75% chance: 0.01x – 2.00x
+        odd = 0.01 + rand * 1.99 / 0.75;
+      } else if (rand < 0.95) {
+        // 20% chance: 2.01x – 5.00x
+        odd = 2.01 + ((rand - 0.75) / 0.20) * 2.99;
+      } else {
+        // 5% chance: 5.01x – 10.00x
+        odd = 5.01 + ((rand - 0.95) / 0.05) * 4.99;
+      }
+
+      return parseFloat(odd.toFixed(2));
+    }
+
+    // Start Prediction
+    startBtn.addEventListener('click', () => {
+      if (isRunning) return;
+
+      if (!selectedCompany) {
+        document.getElementById('companyAlertModal').style.display = 'flex';
+        return;
+      }
+
+      const validTime = validateTime();
+      if (!validTime) return;
+
+      isRunning = true;
+      startBtn.disabled = true;
+      startBtn.textContent = "RUNNING...";
+
+      // Lock UI
+      companyButtons.forEach(btn => btn.style.pointerEvents = 'none');
+      gameTimeInput.disabled = true;
+
+      // Reset odd
+      oddValue.textContent = "0.00x";
+
+      // Generate final odd based on **exact second**
+      const targetOdd = generateOddForTimeAndCompany(selectedCompany, validTime);
+      let currentOdd = 0;
+      const duration = 3000; // 3 seconds animation
+      const startTime = Date.now();
+
+      function animate() {
+        const elapsed = Date.now() - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+
+        // Smooth ease-out curve
+        const easeProgress = progress * progress * (3 - 2 * progress);
+        currentOdd = targetOdd * easeProgress;
+
+        oddValue.textContent = currentOdd.toFixed(2) + 'x';
+
+        if (progress < 1) {
+          requestAnimationFrame(animate);
+        } else {
+          setTimeout(() => {
+            isRunning = false;
+            startBtn.disabled = false;
+            startBtn.textContent = "START";
+            companyButtons.forEach(btn => btn.style.pointerEvents = 'auto');
+            gameTimeInput.disabled = false;
+          }, 500);
         }
-    </script>
+      }
+
+      requestAnimationFrame(animate);
+    });
+  </script>
 </body>
 </html>

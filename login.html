@@ -2,7 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <!-- 🔒 Prevent Zoom: user-scalable=no, maximum-scale=1.0 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <title>Login - Spribe</title>
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#000000">
@@ -10,6 +11,7 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <meta name="apple-mobile-web-app-title" content="Aviator Cheat">
     <link rel="apple-touch-icon" href="icon-192x192.png">
+
     <style>
         body {
             margin: 0;
@@ -20,6 +22,17 @@
             justify-content: center;
             align-items: center;
             height: 100vh;
+            /* Prevent font size adjustment */
+            -webkit-text-size-adjust: none;
+            -moz-text-size-adjust: none;
+            -ms-text-size-adjust: none;
+            text-size-adjust: none;
+            /* Disable selection and zoom gestures */
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            touch-action: manipulation;
         }
 
         .login-container {
@@ -186,7 +199,7 @@
             to { transform: scale(1); opacity: 1; }
         }
 
-        /* Google & Facebook Icons (inline SVG) */
+        /* Google & Facebook Icons */
         .google svg {
             width: 18px;
             height: 18px;
@@ -197,20 +210,10 @@
             height: 18px;
         }
 
-        /* Error modal styling */
-        .modal-error h3 {
-            color: #e74c3c;
-        }
-
-        /* Success modal styling */
-        .modal-success h3 {
-            color: #2ecc71;
-        }
-
-        /* Warning modal styling */
-        .modal-warning h3 {
-            color: #f39c12;
-        }
+        /* Modal Types */
+        .modal-error h3 { color: #e74c3c; }
+        .modal-success h3 { color: #2ecc71; }
+        .modal-warning h3 { color: #f39c12; }
     </style>
 </head>
 <body>
@@ -292,6 +295,30 @@
     </div>
 
     <script>
+        // ✅ Prevent Pinch Zoom
+        document.addEventListener('touchstart', function (e) {
+            if (e.touches.length > 1) {
+                e.preventDefault();
+            }
+        }, { passive: false });
+
+        // ✅ Prevent Double-Tap Zoom (iOS/Android)
+        let lastTouchEnd = 0;
+        document.addEventListener('touchend', function (e) {
+            const now = new Date().getTime();
+            if (now - lastTouchEnd <= 300) {
+                e.preventDefault();
+            }
+            lastTouchEnd = now;
+        }, { passive: false });
+
+        // Optional: Prevent Ctrl/Cmd + +/- zoom (desktop)
+        document.addEventListener('keydown', function (e) {
+            if ((e.ctrlKey || e.metaKey) && (e.key === '+' || e.key === '-' || e.key === '=')) {
+                e.preventDefault();
+            }
+        });
+
         // Show social login popup
         document.getElementById('googleLogin').addEventListener('click', function(e) {
             e.preventDefault();
@@ -324,24 +351,14 @@
 
         // Allow closing modals by clicking outside
         window.onclick = function(event) {
-            const socialModal = document.getElementById('socialModal');
-            const noAccountModal = document.getElementById('noAccountModal');
-            const successModal = document.getElementById('successModal');
-            const passwordErrorModal = document.getElementById('passwordErrorModal');
-            
-            if (event.target === socialModal) {
-                socialModal.style.display = 'none';
-            }
-            if (event.target === noAccountModal) {
-                noAccountModal.style.display = 'none';
-            }
-            if (event.target === successModal) {
-                successModal.style.display = 'none';
-            }
-            if (event.target === passwordErrorModal) {
-                passwordErrorModal.style.display = 'none';
-            }
-        }
+            const modals = ['socialModal', 'noAccountModal', 'successModal', 'passwordErrorModal'];
+            modals.forEach(id => {
+                const modal = document.getElementById(id);
+                if (event.target === modal) {
+                    modal.style.display = 'none';
+                }
+            });
+        };
 
         // Handle form login
         document.getElementById('loginForm').addEventListener('submit', function(e) {
@@ -352,8 +369,6 @@
                 return;
             }
 
-            // In a real app, you would verify the password here
-            // For this demo, we'll just check if fields are filled
             const email = document.getElementById('email').value.trim();
             const password = document.getElementById('password').value.trim();
 
@@ -362,15 +377,10 @@
                 return;
             }
 
-            // Simulate password verification
-            // In a real app, this would be server-side
-            // For demo purposes, we'll assume any non-empty password is valid
-            // since we're not actually storing passwords
-            
-            // Set login status
+            // Simulate successful login (in real app, verify with backend)
             localStorage.setItem('userLoggedIn', 'true');
             localStorage.setItem('loginTimestamp', Date.now());
-            
+
             // Show success modal
             document.getElementById('successModal').style.display = 'flex';
         });

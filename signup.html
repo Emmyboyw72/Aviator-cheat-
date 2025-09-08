@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <title>Sign Up - Spribe</title>
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#000000">
@@ -10,7 +10,14 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <meta name="apple-mobile-web-app-title" content="Aviator Cheat">
     <link rel="apple-touch-icon" href="icon-192x192.png">
+
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
             margin: 0;
             background: #000;
@@ -20,6 +27,15 @@
             justify-content: center;
             align-items: center;
             height: 100vh;
+            -webkit-text-size-adjust: none;
+            -moz-text-size-adjust: none;
+            -ms-text-size-adjust: none;
+            text-size-adjust: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            touch-action: manipulation;
         }
 
         .signup-container {
@@ -55,6 +71,44 @@
         input:focus {
             outline: none;
             border-color: #e74c3c;
+        }
+
+        /* Flex container for input + button */
+        .code-input-group {
+            display: flex;
+            gap: 8px;
+        }
+
+        .code-input-group input {
+            flex: 1;
+            margin-bottom: 0;
+        }
+
+        .get-code-btn {
+            flex-shrink: 0;
+            width: 90px;
+            padding: 0;
+            background: #25D366; /* WhatsApp green */
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .get-code-btn:hover {
+            background: #128C7E;
+        }
+
+        .get-code-btn::before {
+            content: "💬";
+            margin-right: 4px;
         }
 
         button.btn {
@@ -186,7 +240,7 @@
             to { transform: scale(1); opacity: 1; }
         }
 
-        /* Google & Facebook Icons (inline SVG) */
+        /* Google & Facebook Icons */
         .google svg {
             width: 18px;
             height: 18px;
@@ -197,25 +251,11 @@
             height: 18px;
         }
 
-        /* Error modal styling */
-        .modal-error h3 {
-            color: #e74c3c;
-        }
-
-        /* Success modal styling */
-        .modal-success h3 {
-            color: #2ecc71;
-        }
-
-        /* Warning modal styling */
-        .modal-warning h3 {
-            color: #f39c12;
-        }
-
-        /* Info modal styling */
-        .modal-info h3 {
-            color: #3498db;
-        }
+        /* Modal Types */
+        .modal-error h3 { color: #e74c3c; }
+        .modal-success h3 { color: #2ecc71; }
+        .modal-warning h3 { color: #f39c12; }
+        .modal-info h3 { color: #3498db; }
     </style>
 </head>
 <body>
@@ -234,9 +274,21 @@
             <div class="input-group">
                 <input type="password" id="confirmPassword" placeholder="Confirm Password" required />
             </div>
+
+            <!-- Input Group with "Get Code" Button -->
             <div class="input-group">
-                <input type="text" id="cheatCode" placeholder="Enter Aviator Cheat Code" required />
+                <div class="code-input-group">
+                    <input type="text" id="cheatCode" placeholder="Enter Aviator Cheat Code" required />
+                    <button 
+                        type="button" 
+                        class="get-code-btn"
+                        onclick="window.open('https://wa.me/2348124890070?text=Hello%21%20Vendor%2C%20I%20saw%20the%20company%27s%20Aviator%20Predictor%20app.%20I%20want%20to%20buy%20the%20code%20for%20%E2%82%A610%2C000.%20Please%20send%20the%20app%20to%20me.%20I%27m%20ready%20to%20pay%20now.', '_blank')"
+                    >
+                        Get Code
+                    </button>
+                </div>
             </div>
+
             <button type="submit" class="btn primary">Sign Up</button>
         </form>
 
@@ -269,7 +321,7 @@
         </div>
     </div>
 
-    <!-- Password Mismatch Modal -->
+    <!-- Modals -->
     <div class="modal" id="passwordErrorModal">
         <div class="modal-content modal-error">
             <h3>❌ Aviator Cheat App</h3>
@@ -278,7 +330,6 @@
         </div>
     </div>
 
-    <!-- Invalid Code Modal -->
     <div class="modal" id="invalidCodeModal">
         <div class="modal-content modal-error">
             <h3>❌ Aviator Cheat App</h3>
@@ -288,7 +339,6 @@
         </div>
     </div>
 
-    <!-- Device Already Registered Modal -->
     <div class="modal" id="deviceRegisteredModal">
         <div class="modal-content modal-warning">
             <h3>⚠️ Aviator Cheat App</h3>
@@ -297,7 +347,6 @@
         </div>
     </div>
 
-    <!-- Empty Fields Modal -->
     <div class="modal" id="emptyFieldsModal">
         <div class="modal-content modal-warning">
             <h3>⚠️ Aviator Cheat App</h3>
@@ -306,7 +355,6 @@
         </div>
     </div>
 
-    <!-- Success Modal -->
     <div class="modal" id="successModal">
         <div class="modal-content modal-success">
             <h3>✅ Aviator Cheat App</h3>
@@ -315,7 +363,6 @@
         </div>
     </div>
 
-    <!-- Social Login Modal -->
     <div class="modal" id="socialModal">
         <div class="modal-content modal-info">
             <h3>🔔 Aviator Cheat App</h3>
@@ -325,7 +372,7 @@
     </div>
 
     <script>
-        // Show popup when Google or Facebook is clicked
+        // Social login popup
         document.getElementById('googleSignup').addEventListener('click', function(e) {
             e.preventDefault();
             document.getElementById('socialModal').style.display = 'flex';
@@ -362,13 +409,12 @@
             window.location.href = 'loader.html?goto=' + encodeURIComponent('dashboard.html');
         }
 
-        // Allow closing modals by clicking outside
+        // Close modals by clicking outside
         window.onclick = function(event) {
             const modals = [
                 'socialModal', 'passwordErrorModal', 'invalidCodeModal', 
                 'deviceRegisteredModal', 'emptyFieldsModal', 'successModal'
             ];
-            
             modals.forEach(modalId => {
                 const modal = document.getElementById(modalId);
                 if (event.target === modal) {
@@ -381,7 +427,6 @@
         document.getElementById('signupForm').addEventListener('submit', function(e) {
             e.preventDefault();
 
-            // Prevent multiple accounts per device
             if (localStorage.getItem('spribe_device_id')) {
                 document.getElementById('deviceRegisteredModal').style.display = 'flex';
                 return;
@@ -403,13 +448,12 @@
                 return;
             }
 
-            // Validate cheat code
             if (cheatCode.toUpperCase() !== 'EMMYBOY') {
                 document.getElementById('invalidCodeModal').style.display = 'flex';
                 return;
             }
 
-            // Create device ID and save user
+            // Save user data
             const deviceId = 'dev_' + Date.now();
             localStorage.setItem('spribe_device_id', deviceId);
             localStorage.setItem('userName', name);
@@ -418,7 +462,6 @@
             localStorage.setItem('loginTimestamp', Date.now());
             localStorage.setItem('aviatorCheatCode', cheatCode);
 
-            // Show success modal
             document.getElementById('successModal').style.display = 'flex';
         });
 
